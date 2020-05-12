@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import DerivedApp from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <DerivedApp testProp={"s"} />
   </React.StrictMode>,
   document.getElementById('root')
 );

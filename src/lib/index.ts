@@ -1,3 +1,4 @@
+import { createContext, useContext, useState, useLayoutEffect } from "react";
 import { InitialState, createReducer, Action } from "./types";
 
 const SubscriptionListener = () => {
@@ -24,7 +25,7 @@ const SubscriptionListener = () => {
   };
 };
 
-const Store = (args: {
+export const Store = (args: {
   state: InitialState;
   actions: {
     [key: string]: (
@@ -33,16 +34,16 @@ const Store = (args: {
       getState?: InitialState
     ) => Record<string, any>;
   };
-  reducer: typeof createReducer;
+  reducer: (state: InitialState, action: Action) => InitialState;
 }) => {
-  const events = SubscriptionListener();
+  const listener = SubscriptionListener();
   const actions = args.actions || {};
   const reducer = args.reducer || {};
 
   let state = new Proxy(args.state || {}, {
     set: function (state, key, value) {
       state[key.toString()] = value;
-      events.listen("stateChange", state);
+      listener.listen("stateChange", state);
       return true;
     },
   });
@@ -61,5 +62,3 @@ const Store = (args: {
 
   return { state, dispatch };
 };
-
-export { Store };
